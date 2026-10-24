@@ -14,25 +14,48 @@ You can use it to build trading bots, dashboards or other tools on top of a runn
 
 ## Install
 
-The library isn't published to Maven Central. Build it and install it into your local Maven repository:
+### From Maven Central
+
+```xml
+<dependency>
+    <groupId>io.github.garywild</groupId>
+    <artifactId>haveno-java-client</artifactId>
+    <version>0.1.0</version>
+</dependency>
+```
+
+Gradle: `implementation("io.github.garywild:haveno-java-client:0.1.0")`
+
+### From JitPack
+
+JitPack builds the library straight from a GitHub tag. Add the JitPack repository and the dependency:
+
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>com.github.garywild</groupId>
+    <artifactId>haveno-java-client</artifactId>
+    <version>v0.1.0</version>
+</dependency>
+```
+
+[![](https://jitpack.io/v/garywild/haveno-java-client.svg)](https://jitpack.io/#garywild/haveno-java-client)
+
+### From source
 
 ```
-git clone <this repo>
+git clone https://github.com/garywild/haveno-java-client.git
 cd haveno-java-client
 mvn install
 ```
 
-The build generates the gRPC stubs from Haveno's `.proto` files, then compiles and runs the tests.
-
-Then add it to your project:
-
-```xml
-<dependency>
-    <groupId>haveno.java</groupId>
-    <artifactId>haveno-java-client</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
-</dependency>
-```
+To publish a new version, see [RELEASING.md](RELEASING.md).
 
 ## Quick start
 

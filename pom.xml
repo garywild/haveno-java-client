@@ -4,20 +4,42 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>haveno.java</groupId>
+    <groupId>io.github.garywild</groupId>
     <artifactId>haveno-java-client</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
 
     <name>Haveno Java Client</name>
     <description>Java client library for the Haveno daemon's gRPC API</description>
+    <url>https://github.com/garywild/haveno-java-client</url>
 
     <licenses>
         <license>
             <name>GNU Affero General Public License v3.0</name>
             <url>https://www.gnu.org/licenses/agpl-3.0.html</url>
+            <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <developers>
+        <developer>
+            <id>garywild</id>
+            <name>garywild</name>
+            <url>https://github.com/garywild</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/garywild/haveno-java-client</url>
+        <connection>scm:git:https://github.com/garywild/haveno-java-client.git</connection>
+        <developerConnection>scm:git:git@github.com:garywild/haveno-java-client.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/garywild/haveno-java-client/issues</url>
+    </issueManagement>
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
@@ -120,6 +142,63 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <!-- Maven Central requires a javadoc jar -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.11.2</version>
+                <configuration>
+                    <!-- generated protobuf sources aren't javadoc-clean -->
+                    <doclint>none</doclint>
+                    <quiet>true</quiet>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals><goal>jar</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- mvn deploy -Prelease : sign and publish to Maven Central (see RELEASING.md) -->
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.7</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals><goal>sign</goal></goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.10.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
